@@ -1,0 +1,1264 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Seu ritmo estimado, MAPE.IA</title>
+  <meta name="description" content="Estimativa educativa da sua velocidade de envelhecimento, a partir dos 24 sinais que você relatou. Não é exame nem diagnóstico. A medição com biomarcadores acontece na plataforma MAPE.IA.">
+  <meta name="theme-color" content="#0a1920">
+  <meta name="robots" content="noindex,nofollow">
+  <link rel="icon" type="image/png" href="../img/logo.png">
+
+  <!-- Meta Pixel Code (pixel próprio MAPE.IA, mesmo do quiz) -->
+  <script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '1356437569667142');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=1356437569667142&ev=PageView&noscript=1"
+  /></noscript>
+  <!-- End Meta Pixel Code -->
+  <!-- TODO: GA4 / GTM (Robério passar ID) -->
+
+  <!-- vTurb preload: TROCAR junto com VSL.playerId (script abaixo) quando a VSL V4 for gravada.
+       O prefetch do quiz (funil/index.html, VSL_PRELOAD_LINKS) usa as mesmas URLs: trocar lá também. -->
+  <link rel="preload" href="https://scripts.converteai.net/2832ef97-4113-4437-b38a-987f9f729ea8/players/69e9ec4c05c3ed4453de70f5/v4/player.js" as="script">
+  <link rel="preload" href="https://scripts.converteai.net/lib/js/smartplayer-wc/v4/smartplayer.js" as="script">
+  <link rel="preload" href="https://cdn.converteai.net/2832ef97-4113-4437-b38a-987f9f729ea8/69e9ec3788365845bd044b87/main.m3u8" as="fetch">
+  <link rel="dns-prefetch" href="https://cdn.converteai.net">
+  <link rel="dns-prefetch" href="https://scripts.converteai.net">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Oxanium:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #ffffff;
+      --bg-warm: #faf7f2;
+      --bg-sand: #f0ebe3;
+      --bg-dark: #0a1920;
+      --bg-dark-2: #02272f;
+      --ink: #111111;
+      --ink-2: #2a2a2a;
+      --muted: #6b6b6b;
+      --muted-2: #9a9a9a;
+      --line: #e9e4db;
+      --line-dark: rgba(255,255,255,.12);
+      --accent: #26c6da;
+      --accent-ink: #0a7a88;
+      --accent-soft: #e6f9fc;
+      --accent-light: #d5f4f7;
+      --accent-text: #003b42;
+      --warn: #d97757;
+      --good: #4a9b7a;
+      --bad: #e07560;
+      --radius-s: 10px;
+      --radius-m: 16px;
+      --radius-l: 24px;
+      --radius-xl: 32px;
+      --font: 'DM Sans', system-ui, -apple-system, sans-serif;
+      --font-display: 'DM Sans', system-ui, -apple-system, sans-serif;
+      --font-script: 'Cormorant Garamond', Georgia, serif;
+      --font-mono: 'Oxanium', ui-monospace, monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    html, body { overflow-x: hidden; max-width: 100vw; }
+    body {
+      margin: 0;
+      font-family: var(--font);
+      color: var(--ink-2);
+      background: var(--bg);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    h1, h2, h3, .display {
+      font-family: var(--font-display);
+      font-style: normal;
+      color: var(--ink);
+      letter-spacing: -0.015em;
+      font-weight: 600;
+      margin: 0;
+    }
+    .calig {
+      font-family: var(--font-script);
+      font-style: italic;
+      font-weight: 500;
+      letter-spacing: -0.005em;
+      color: var(--accent-ink);
+    }
+    /* Em fundo escuro o caligráfico usa o tom claro (igual ao index) */
+    .hero .calig, .section.dark .calig, .final-cta .calig { color: var(--accent-light); }
+    em { font-style: italic; }
+    p { margin: 0; line-height: 1.55; }
+
+    .container { max-width: 880px; margin: 0 auto; padding: 0 20px; }
+    @media (max-width: 540px) { .container { padding: 0 16px; } }
+
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-family: var(--font-mono); font-size: 11px; font-weight: 500;
+      letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);
+    }
+    .eyebrow .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); display: inline-block; }
+    .eyebrow.light { color: rgba(255,255,255,.7); }
+
+    /* ===================== TOPBAR ===================== */
+    .topbar {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(10, 25, 32, .9);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 14px 20px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .brand {
+      display: inline-flex; align-items: center; gap: 10px;
+      text-decoration: none; color: #fff;
+    }
+    .brand img { height: 24px; width: auto; filter: brightness(0) invert(1); }
+    .brand-dot {
+      width: 9px; height: 9px; border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 0 rgba(38, 198, 218, .6);
+      animation: dotPulse 2.4s ease-out infinite;
+    }
+    @keyframes dotPulse {
+      0%   { box-shadow: 0 0 0 0   rgba(38, 198, 218, .6); }
+      70%  { box-shadow: 0 0 0 10px rgba(38, 198, 218, 0); }
+      100% { box-shadow: 0 0 0 0   rgba(38, 198, 218, 0); }
+    }
+    .topbar-meta {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.55);
+    }
+    @media (max-width: 540px) { .topbar-meta { display: none; } }
+
+    /* ===================== HERO ===================== */
+    .hero {
+      background: var(--bg-dark);
+      color: #fff;
+      padding: 36px 0 56px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: ""; position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse at 30% 20%, rgba(38,198,218,.18), transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(38,198,218,.08), transparent 55%);
+      pointer-events: none;
+    }
+    .hero .container { position: relative; z-index: 1; }
+    .hero h1 { color: #fff; }
+
+    .score-wrap {
+      display: flex; align-items: center; gap: 26px;
+      margin-top: 22px;
+      padding: 22px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid var(--line-dark);
+      border-radius: var(--radius-l);
+    }
+    @media (max-width: 540px) {
+      .score-wrap { gap: 18px; padding: 18px; }
+    }
+    .score-ring {
+      flex: 0 0 96px;
+      position: relative;
+      width: 96px; height: 96px;
+    }
+    .score-ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+    .score-ring circle.track { fill: none; stroke: rgba(255,255,255,.08); stroke-width: 6; }
+    .score-ring circle.fill {
+      fill: none; stroke: var(--accent); stroke-width: 6;
+      stroke-linecap: round;
+      stroke-dasharray: 270;
+      stroke-dashoffset: 270;
+      transition: stroke-dashoffset 1.4s cubic-bezier(.65, .05, .35, 1) .3s,
+                  stroke 1.4s ease .3s;
+    }
+    .score-ring .score-num {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: var(--font-mono);
+      font-size: 26px;
+      font-weight: 700;
+      color: #fff;
+    }
+    .score-info { flex: 1; min-width: 0; }
+    .score-tier {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 6px;
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .score-tier .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+    .score-tier.acelerado { color: var(--bad); }
+    .score-tier.acelerado .dot { background: var(--bad); }
+    .score-tier.transicao { color: #f4c95d; }
+    .score-tier.transicao .dot { background: #f4c95d; }
+    .score-tier.estavel { color: var(--good); }
+    .score-tier.estavel .dot { background: var(--good); }
+
+    /* Conteúdo liberado pelo gate da VSL (revelado aos VSL.gateSeconds) */
+    .esconder { display: none; }
+    .score-label {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: clamp(22px, 3.5vw, 28px);
+      line-height: 1.15;
+      color: #fff;
+    }
+    .score-sub {
+      margin-top: 8px;
+      font-size: 14px;
+      color: rgba(255,255,255,.6);
+    }
+
+    .hero-headline {
+      font-size: clamp(22px, 3.2vw, 31px);
+      line-height: 1.12;
+      margin-top: 10px;
+      max-width: 24ch;
+      font-weight: 600;
+    }
+    /* Cue minimal acima do player */
+    .hero-cue {
+      margin-top: 8px;
+      font-size: 14px;
+      line-height: 1.45;
+      color: rgba(255,255,255,.72);
+    }
+
+    /* Player no topo do hero (above the fold), borda fina, sem sobra:
+       o fundo transparente faz qualquer borda/letterbox sumir no escuro do hero */
+    .hero-player {
+      margin-top: 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(213,244,247,.35);
+      background: transparent;
+      box-shadow: 0 16px 44px rgba(0,0,0,.4);
+    }
+    /* Separa o payoff (score + narrativa) do player */
+    .hero .score-wrap { margin-top: 28px; }
+
+    /* Narrativa personalizada (Dra. Amanda lê o caso) */
+    .hero-narrative {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      margin-top: 24px;
+      padding: 18px 20px;
+      background: rgba(255,255,255,.05);
+      border-left: 3px solid var(--accent);
+      border-radius: 14px;
+      backdrop-filter: blur(8px);
+      max-width: 640px;
+    }
+    .hero-narrative img {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+      border: 2px solid rgba(255,255,255,.12);
+      box-shadow: 0 0 0 2px rgba(38, 198, 218, .35);
+    }
+    .hero-narrative blockquote {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: clamp(16.5px, 1.85vw, 20px);
+      line-height: 1.4;
+      color: #fff;
+      margin: 0;
+      letter-spacing: -0.005em;
+    }
+    .hero-narrative blockquote strong { color: var(--accent); font-weight: 600; }
+    .narrative-source {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.55);
+      margin-top: 10px;
+    }
+    .narrative-source strong { color: #fff; font-weight: 600; }
+    @media (max-width: 540px) {
+      .hero-narrative { padding: 16px 16px; gap: 12px; }
+      .hero-narrative img { width: 40px; height: 40px; }
+    }
+
+    /* ===================== SECTION ===================== */
+    .section { padding: clamp(56px, 8vw, 96px) 0; }
+    .section.tight { padding: 40px 0; }
+    .section.warm { background: var(--bg-warm); }
+    .section.sand { background: var(--bg-sand); }
+    .section.dark { background: var(--bg-dark); color: rgba(255,255,255,.85); }
+    .section.dark h2, .section.dark h3 { color: #fff; }
+    .section.dark .eyebrow { color: rgba(255,255,255,.6); }
+
+    h2.section-title {
+      font-size: clamp(28px, 4.4vw, 44px);
+      line-height: 1.1;
+      margin-top: 14px;
+      max-width: 24ch;
+    }
+
+    /* ===================== SINAIS ===================== */
+    .signals {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      margin-top: 28px;
+    }
+    @media (min-width: 720px) {
+      .signals { grid-template-columns: 1fr 1fr 1fr; gap: 18px; }
+    }
+    .signal {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-l);
+      padding: 22px;
+      display: flex; flex-direction: column; gap: 14px;
+      box-shadow: 0 4px 20px rgba(0,0,0,.03);
+      transition: transform .3s, box-shadow .3s;
+    }
+    .signal:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,.06); }
+    .signal-ico {
+      width: 46px; height: 46px;
+      border-radius: 12px;
+      background: var(--accent-soft);
+      color: var(--accent-ink);
+      display: inline-flex; align-items: center; justify-content: center;
+    }
+    .signal-ico .material-symbols-outlined { font-size: 26px; }
+    .signal-tag {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .signal-title {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: 22px;
+      line-height: 1.2;
+      color: var(--ink);
+      font-weight: 500;
+    }
+    .signal-text {
+      font-size: 14.5px;
+      line-height: 1.55;
+      color: var(--ink-2);
+    }
+    .signal-text strong { color: var(--ink); font-weight: 600; }
+
+    /* ===================== VSL ===================== */
+    .vsl-card {
+      background: var(--bg-dark);
+      border-radius: var(--radius-xl);
+      padding: 32px 24px 36px;
+      color: #fff;
+      box-shadow: 0 30px 80px rgba(0,0,0,.2);
+      margin-top: 36px;
+      position: relative;
+      overflow: hidden;
+    }
+    .vsl-card::before {
+      content: ""; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(38,198,218,.18), transparent 60%);
+      pointer-events: none;
+    }
+    .vsl-card > * { position: relative; z-index: 1; }
+    .vsl-card h2 {
+      color: #fff;
+      font-size: clamp(22px, 3vw, 30px);
+      max-width: 26ch;
+    }
+    .vsl-card-lead {
+      margin-top: 12px;
+      color: rgba(255,255,255,.7);
+      font-size: 15px;
+      max-width: 52ch;
+    }
+    .vsl-embed {
+      margin-top: 22px;
+      border-radius: 18px;
+      overflow: hidden;
+      background: #000;
+      border: 3px solid var(--accent-light);
+      box-shadow: 0 20px 50px rgba(0,0,0,.4);
+    }
+    .vsl-embed vturb-smartplayer { display: block; width: 100%; }
+    .vsl-watch-cue {
+      margin-top: 18px;
+      display: inline-flex; align-items: center; gap: 10px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    .vsl-watch-cue .pulse {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--accent);
+      animation: pulseDot 1.4s ease-out infinite;
+    }
+    @keyframes pulseDot {
+      0%, 100% { opacity: 1; }
+      50% { opacity: .4; }
+    }
+
+    /* ===================== CTA BUTTON ===================== */
+    .btn-cta {
+      display: inline-flex; align-items: center; justify-content: center;
+      gap: 12px;
+      background: var(--accent);
+      color: var(--accent-text);
+      font-family: var(--font);
+      font-weight: 700;
+      font-size: 18px;
+      letter-spacing: -0.01em;
+      padding: 20px 30px;
+      border: 0;
+      border-radius: 999px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform .15s ease, background .15s ease;
+      box-shadow: 0 0 0 0 rgba(38, 198, 218, .45);
+      animation: ctaPulse 2.2s ease-out infinite;
+    }
+    .btn-cta:hover { transform: translateY(-2px); background: #20b0c2; }
+    .btn-cta:active { transform: translateY(0); }
+    .btn-cta .arrow { transition: transform .2s; font-size: 22px; line-height: 1; }
+    .btn-cta:hover .arrow { transform: translateX(4px); }
+    @keyframes ctaPulse {
+      0%   { box-shadow: 0 0 0 0   rgba(38, 198, 218, .55); }
+      70%  { box-shadow: 0 0 0 16px rgba(38, 198, 218, 0); }
+      100% { box-shadow: 0 0 0 0   rgba(38, 198, 218, 0); }
+    }
+    .btn-cta.lg {
+      font-size: 20px;
+      padding: 22px 36px;
+    }
+    .btn-cta.block { width: 100%; }
+    @media (prefers-reduced-motion: reduce) {
+      .btn-cta, .brand-dot, .pulse { animation: none; }
+    }
+
+    /* ===================== OFFER ===================== */
+    .offer-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+      margin-top: 32px;
+      background: var(--bg-dark);
+      color: #fff;
+      border-radius: var(--radius-xl);
+      padding: 32px;
+    }
+    @media (min-width: 820px) {
+      .offer-grid { grid-template-columns: 1.2fr 1fr; gap: 36px; padding: 44px; }
+    }
+    .offer-grid h2 { color: #fff; font-size: clamp(26px, 3.6vw, 36px); }
+    .offer-list { list-style: none; padding: 0; margin: 22px 0 0; display: flex; flex-direction: column; gap: 14px; }
+    .offer-list li {
+      display: flex; align-items: flex-start; gap: 12px;
+      font-size: 15.5px;
+      color: rgba(255,255,255,.85);
+      line-height: 1.5;
+    }
+    .offer-list li strong { color: #fff; font-weight: 600; }
+    .offer-list .check {
+      flex: 0 0 24px; width: 24px; height: 24px;
+      background: var(--accent);
+      color: var(--accent-text);
+      border-radius: 50%;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-weight: 700;
+      font-size: 13px;
+    }
+    .price-box {
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      border: 1px solid var(--line-dark);
+      border-radius: var(--radius-l);
+      padding: 26px;
+      text-align: center;
+      align-self: stretch;
+      display: flex; flex-direction: column;
+    }
+    .price-flag {
+      display: inline-block;
+      background: rgba(38,198,218,.15);
+      color: var(--accent);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 6px 12px;
+      border-radius: 999px;
+      align-self: center;
+      margin-bottom: 12px;
+    }
+    .price-old {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      color: var(--muted-2);
+      text-decoration: line-through;
+    }
+    .price-main {
+      font-family: var(--font-display);
+      font-style: italic;
+      color: #fff;
+      margin-top: 6px;
+    }
+    .price-main .cur { font-size: 26px; vertical-align: top; line-height: 1.4; margin-right: 4px; font-style: normal; font-family: var(--font-mono); }
+    .price-main .val { font-size: clamp(58px, 10vw, 90px); line-height: 1; }
+    .price-period { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.08em; color: rgba(255,255,255,.7); margin-top: 8px; text-transform: uppercase; }
+    .price-installment { font-size: 16px; color: rgba(255,255,255,.85); margin-top: 8px; }
+    .price-installment strong { color: var(--accent); }
+    .price-note { margin-top: 14px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; color: rgba(255,255,255,.55); text-transform: uppercase; }
+
+    /* ===================== GUARANTEE ===================== */
+    .guarantee {
+      display: flex; align-items: center; gap: 22px;
+      background: var(--bg-warm);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-l);
+      padding: 26px;
+    }
+    @media (max-width: 540px) { .guarantee { flex-direction: column; align-items: flex-start; gap: 14px; } }
+    .guarantee-seal {
+      flex: 0 0 60px;
+      width: 60px; height: 60px;
+      border-radius: 50%;
+      background: var(--accent-soft);
+      color: var(--accent-ink);
+      display: inline-flex; align-items: center; justify-content: center;
+    }
+    .guarantee h3 { font-style: normal; font-family: var(--font); font-weight: 700; font-size: 22px; }
+
+    /* ===================== MÉDICAS ===================== */
+    .docs {
+      display: grid; grid-template-columns: 1fr; gap: 18px;
+      margin-top: 28px;
+    }
+    @media (min-width: 720px) { .docs { grid-template-columns: 1fr 1fr; gap: 22px; } }
+    .doc {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-l);
+      padding: 24px;
+    }
+    .doc-top { display: flex; align-items: center; gap: 16px; margin-bottom: 14px; }
+    .doc-top img { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; }
+    .doc-name { font-family: var(--font); font-weight: 700; color: var(--ink); font-size: 18px; }
+    .doc-crm { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em; color: var(--muted); margin-top: 4px; }
+    .doc-bio { font-size: 14.5px; line-height: 1.55; color: var(--ink-2); }
+    .doc-bio em { color: var(--accent-ink); }
+    .doc-creds { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+    .doc-creds .cred {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent-ink);
+      padding: 5px 10px;
+      border: 1px solid var(--accent-soft);
+      background: var(--accent-soft);
+      border-radius: 999px;
+    }
+
+    /* ===================== FINAL CTA ===================== */
+    .final-cta {
+      text-align: center;
+      padding: 0 0 8px;
+    }
+    .final-cta h2 {
+      color: #fff;
+      font-size: clamp(28px, 4.8vw, 44px);
+      max-width: 22ch;
+      margin: 0 auto;
+    }
+    .final-cta p { color: rgba(255,255,255,.75); max-width: 56ch; margin: 18px auto 0; font-size: 16px; }
+    .final-cta .stamp {
+      display: inline-block;
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: 30px;
+      color: #ffc107;
+      margin-top: 22px;
+    }
+
+    /* ===================== STICKY MOBILE CTA ===================== */
+    .sticky-cta {
+      position: fixed; left: 0; right: 0; bottom: 0;
+      z-index: 60;
+      background: rgba(10,25,32,.95);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-top: 1px solid rgba(255,255,255,.1);
+      padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+      display: none;
+      align-items: center; gap: 12px;
+      transform: translateY(120%);
+      transition: transform .35s ease;
+    }
+    .sticky-cta.is-visible { transform: translateY(0); display: flex; }
+    .sticky-cta .sc-price { color: #fff; font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.06em; line-height: 1.3; flex: 0 0 auto; }
+    .sticky-cta .sc-price strong { display: block; font-family: var(--font-display); font-style: italic; font-size: 22px; color: var(--accent); }
+    .sticky-cta .btn-cta { flex: 1; padding: 14px 16px; font-size: 15px; animation: none; }
+
+    /* ===================== FOOTER ===================== */
+    .foot {
+      background: var(--bg-dark-2);
+      color: rgba(255,255,255,.55);
+      padding: 40px 0 100px; /* extra bottom for sticky cta */
+      font-size: 13px;
+    }
+    .foot .container { display: flex; flex-direction: column; gap: 14px; }
+    .foot small { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em; }
+
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <a class="brand" href="../">
+      <img src="../img/logo.png" alt="MAPE.IA">
+      <span class="brand-dot"></span>
+    </a>
+    <div class="topbar-meta">Seu mapeamento · MAPE.IA</div>
+  </header>
+
+  <!-- ====================== HERO / PLAYER ====================== -->
+  <section class="hero" id="vsl">
+    <div class="container">
+      <span class="eyebrow light"><span class="dot"></span><span id="result-stage-label">Sua estimativa está pronta</span></span>
+
+      <h1 class="hero-headline" id="hero-headline">
+        Nosso teste estima: seu corpo está envelhecendo em ritmo de <span class="calig" id="hero-speed">1.4x</span>.
+      </h1>
+      <p class="hero-cue">Aperta o play: a <span class="calig">Dra. Iana</span> explica o que esse número significa, e como fazer o ponteiro voltar 👇</p>
+
+      <!-- PLAYER (above the fold), montado por JS a partir da config VSL -->
+      <div class="vsl-embed hero-player" id="vsl-mount"></div>
+
+      <div class="vsl-watch-cue">
+        <span class="pulse"></span>
+        <span>Assista: o botão de ação aparece no momento certo do vídeo</span>
+      </div>
+
+      <!-- PAYOFF: velocímetro + narrativa (logo abaixo do player) -->
+      <div class="score-wrap">
+        <div class="score-ring">
+          <svg viewBox="0 0 96 96">
+            <circle class="track" cx="48" cy="48" r="43"/>
+            <circle class="fill" id="ring-fill" cx="48" cy="48" r="43"/>
+          </svg>
+          <span class="score-num" id="score-num"></span>
+        </div>
+        <div class="score-info">
+          <div class="score-tier" id="score-tier-label">
+            <span class="dot"></span>
+            <span id="score-tier-text">Calculando…</span>
+          </div>
+          <div class="score-label" id="score-label">Seu ritmo está em análise.</div>
+          <div class="score-sub" id="score-sub">Estimativa educativa a partir de 24 sinais que você relatou. Não é exame nem diagnóstico.</div>
+        </div>
+      </div>
+
+      <div class="hero-narrative" id="hero-narrative">
+        <img src="../img/iana.png" alt="Dra. Iana Lavigne">
+        <blockquote id="narrative-text"></blockquote>
+        <div class="narrative-source"><strong>Dra. Iana Lavigne</strong> · Harvard Lifestyle Medicine, analisando seu caso</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== ACELERADORES DETECTADOS ====================== -->
+  <section class="section">
+    <div class="container">
+      <span class="eyebrow"><span class="dot"></span><span id="accel-count">Aceleradores cruzados</span></span>
+      <h2 class="section-title">O que está puxando <span class="calig">o seu ritmo.</span></h2>
+
+      <div class="signals" id="signals">
+        <!-- rendered by JS -->
+      </div>
+
+      <p style="margin-top: 28px; font-size: 16px; color: var(--ink-2); max-width: 60ch;">
+        Nenhum desses sinais sozinho define nada, quase todo mundo tem um deles. Juntos, eles empurram o ponteiro. A boa notícia: <strong style="color:var(--ink);">ponteiro que se conhece, volta.</strong>
+      </p>
+    </div>
+  </section>
+
+  <!-- ====================== A ZONA CEGA DO CHECKUP (mecanismo) ====================== -->
+  <section class="section">
+    <div class="container">
+      <span class="eyebrow"><span class="dot"></span>Por que ninguém te mostrou isso</span>
+      <h2 class="section-title">A <span class="calig">Zona Cega</span> do checkup.</h2>
+
+      <div class="signals">
+        <article class="signal">
+          <div class="signal-ico"><span class="material-symbols-outlined">photo_camera</span></div>
+          <span class="signal-tag">A foto</span>
+          <div class="signal-title">Seu exame anual é uma foto</div>
+          <p class="signal-text">Colesterol de hoje. Glicose de hoje. Cada número sozinho, cada um na sua caixinha, todos "dentro da faixa". A foto diz como você está hoje. <strong>E só.</strong></p>
+        </article>
+        <article class="signal">
+          <div class="signal-ico"><span class="material-symbols-outlined">movie</span></div>
+          <span class="signal-tag">O filme</span>
+          <div class="signal-title">Envelhecer é um filme</div>
+          <p class="signal-text">É a velocidade com que tudo caminha junto, entre uma foto e outra: insulina subindo devagar, cortisol desregulando, inflamação crescendo. <strong>O filme roda por anos sem plateia.</strong></p>
+        </article>
+        <article class="signal">
+          <div class="signal-ico"><span class="material-symbols-outlined">visibility_off</span></div>
+          <span class="signal-tag">A zona cega</span>
+          <div class="signal-title">A velocidade não aparece em 15 marcadores</div>
+          <p class="signal-text">Enquanto cada foto isolada diz "normal", o filme pode estar rodando em 1,5x. É nessa janela que as doenças crônicas se constroem, <strong>em silêncio, sem pedir licença</strong>.</p>
+        </article>
+      </div>
+
+      <p style="margin-top: 28px; font-size: 17px; color: var(--ink-2); max-width: 60ch;">
+        A virada: esse número não é adivinhação. <strong style="color:var(--ink);">Se lê.</strong> A ciência consegue cruzar resultados que provavelmente já estão no seu último exame e estimar a idade que o seu corpo realmente tem. E o que se lê, <strong style="color:var(--ink);">se mexe</strong>. É exatamente o que a MAPE.IA faz com os exames que você já tem.
+      </p>
+    </div>
+  </section>
+
+  <!-- ====================== OFFER (liberada pelo gate da VSL) ====================== -->
+  <section class="section sand esconder" id="oferta">
+    <div class="container">
+      <div style="text-align:center; max-width: 720px; margin: 0 auto;">
+        <span class="eyebrow"><span class="dot"></span>Sua opção dentro da MAPE.IA</span>
+        <h2 class="section-title" style="margin-left:auto; margin-right:auto;">
+          Uma investigação assim custaria <span style="text-decoration:line-through; color:var(--muted-2); font-style:normal; font-family:var(--font-mono); font-size:.6em;">R$ 1.500</span> feita por fora. <br> Aqui, custa <span class="calig">R$ 97,00.</span>
+        </h2>
+        <p style="margin-top: 14px; font-size: 16px; color: var(--ink-2);">Exame por exame, consulta por consulta, você gastaria muito mais. E ainda terminaria com uma pilha de papel e ninguém pra ligar os pontos.</p>
+      </div>
+
+      <div class="offer-grid">
+        <div>
+          <h2>Tudo o que você leva:</h2>
+          <ul class="offer-list">
+            <li><span class="check">✓</span><span><strong>Sua idade biológica</strong>, calculada a partir dos biomarcadores dos seus exames de sangue, com evolução no tempo</span></li>
+            <li><span class="check">✓</span><span><strong>O mapa completo do seu estilo de vida</strong>: sono, movimento, comida, cabeça, tudo que o exame não enxerga</span></li>
+            <li><span class="check">✓</span><span><strong>Plano de ação personalizado</strong>: as alavancas certas pra fazer o ponteiro voltar</span></li>
+            <li><span class="check">✓</span><span><strong>Os exames de prevenção certos pro seu perfil</strong>, porque descobrir cedo é a sua melhor chance</span></li>
+            <li><span class="check">✓</span><span><strong>Carteira Digital de Exames</strong>: os que você já tem, perdidos no WhatsApp e na gaveta, finalmente juntos</span></li>
+            <li><span class="check">✓</span><span><strong>Olívia, sua assistente de saúde</strong>: conhece os seus dados e responde a qualquer hora</span></li>
+            <li><span class="check">✓</span><span><strong>Nova medição incluída</strong> no período, pra ver o ponteiro andar pro outro lado</span></li>
+          </ul>
+        </div>
+        <div class="price-box">
+          <span class="price-flag">Oferta por tempo limitado</span>
+          <span class="price-old">De R$ 297</span>
+          <div class="price-main"><span class="cur">R$</span><span class="val">97</span></div>
+          <div class="price-period">3 meses de acesso completo</div>
+          <div class="price-installment">ou <strong>12x R$ 10</strong> no cartão</div>
+          <a href="#" class="btn-cta block" style="margin-top:18px;" id="cta-offer" data-checkout="true">
+            Quero descobrir a idade do meu corpo <span class="arrow">→</span>
+          </a>
+          <div class="price-note">Pouco mais de R$ 1 por dia · Menos que uma consulta</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== GUARANTEE (liberada pelo gate) ====================== -->
+  <section class="section tight esconder">
+    <div class="container">
+      <div class="guarantee">
+        <div class="guarantee-seal">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+            <path d="M12 2L3 6v6c0 5.5 3.8 10.7 9 12 5.2-1.3 9-6.5 9-12V6l-9-4z"/>
+            <path d="M9 12l2 2 4-4" stroke-width="2"/>
+          </svg>
+        </div>
+        <div>
+          <div class="eyebrow" style="margin-bottom:6px;"><span class="dot"></span>Garantia incondicional</div>
+          <h3>7 dias para decidir. Sem perguntas.</h3>
+          <p style="margin-top:8px; color:var(--ink-2);">Você descobre a idade do seu corpo e, se não fizer sentido, devolvemos tudo. 100% do seu dinheiro, conforme o <strong>Artigo 49 do Código de Defesa do Consumidor</strong>. O único cenário em que você perde é o cenário em que você não olha.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== MÉDICAS (liberada pelo gate) ====================== -->
+  <section class="section esconder">
+    <div class="container">
+      <span class="eyebrow"><span class="dot"></span>Quem está falando com você</span>
+      <h2 class="section-title">Duas médicas. Uma obsessão: <span class="calig">chegar antes, e não depois.</span></h2>
+
+      <div class="docs">
+        <div class="doc">
+          <div class="doc-top">
+            <img src="../img/iana.png" alt="Dra. Iana Lavigne">
+            <div>
+              <div class="doc-name">Dra. Iana Lavigne</div>
+              <div class="doc-crm">CRM SP · Cirurgiã UNIFESP · Harvard</div>
+            </div>
+          </div>
+          <div class="doc-bio">Cirurgiã de catarata e transplante de córnea. Passou a carreira vendo <em>gente que chegava tarde</em>, em que o aviso tinha estado lá o tempo todo. Na pandemia, parou, estudou e se formou em Medicina do Estilo de Vida por Harvard. Saiu com uma pergunta: por que esperar um susto pra começar?</div>
+          <div class="doc-creds">
+            <span class="cred">UNIFESP</span>
+            <span class="cred">Harvard</span>
+            <span class="cred">Lifestyle Medicine</span>
+          </div>
+        </div>
+
+        <div class="doc">
+          <div class="doc-top">
+            <img src="../img/amanda.png" alt="Dra. Amanda Rocha">
+            <div>
+              <div class="doc-name">Dra. Amanda Rocha</div>
+              <div class="doc-crm">CRM SP · Cardiologista USP</div>
+            </div>
+          </div>
+          <div class="doc-bio">Cardiologista formada pela USP, cuida com as próprias mãos daquilo que é mais sério de tudo: o coração. <em>O que ela vê no pronto-socorro começou 10 anos antes</em>, em sinais que ninguém cruzou.</div>
+          <div class="doc-creds">
+            <span class="cred">USP</span>
+            <span class="cred">Cardiologia</span>
+            <span class="cred">ACLM</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== AS 3 PORTAS + FECHO HONESTO (liberada pelo gate) ====================== -->
+  <section class="section dark final-cta esconder" id="final">
+    <div class="container">
+      <h2>Daqui, você sai por <span class="calig">um de três caminhos.</span></h2>
+      <p style="margin-top:22px;"><strong style="color:#fff;">1.</strong> Fechar esta página e seguir igual: com o cansaço que virou rotina e o exame "normal" que não te explica nada. O ponteiro continua rodando.</p>
+      <p style="margin-top:14px;"><strong style="color:#fff;">2.</strong> Tentar por conta própria: marcar exame por exame nos próximos meses, gastar muito mais, e terminar com números soltos que ninguém cruza.</p>
+      <p style="margin-top:14px;"><strong style="color:#fff;">3.</strong> Ou descobrir a idade que o seu corpo tem de verdade, por menos que uma consulta, e sair com um plano pra fazer o tempo trabalhar a seu favor.</p>
+      <span class="stamp">Enquanto ainda é cedo.</span>
+      <p style="font-size:20px; margin-top:18px; color:rgba(255,255,255,.92); font-family:var(--font-display); font-style:italic;">Ninguém sério promete que você nunca vai adoecer.<br>O que dá pra dizer, olhando no seu olho: descobrir tarde é o que custa caro. Saber a tempo é o que muda a história.</p>
+      <div style="margin-top: 36px;">
+        <a href="#" class="btn-cta lg" id="cta-final" data-checkout="true">
+          Quero descobrir a idade do meu corpo, R$ 97 <span class="arrow">→</span>
+        </a>
+        <div style="margin-top:16px; font-family:var(--font-mono); font-size:12px; color:rgba(255,255,255,.55); letter-spacing:0.08em;">7 dias de garantia incondicional · Cadastro em menos de 2 minutos</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== STICKY MOBILE CTA (liberado pelo gate via JS) ====================== -->
+  <div class="sticky-cta" id="sticky-cta">
+    <div class="sc-price">
+      De R$ 297<br><strong>R$ 97</strong>
+    </div>
+    <a href="#" class="btn-cta" data-checkout="true">Descobrir a idade do meu corpo <span class="arrow">→</span></a>
+  </div>
+
+  <!-- ====================== FOOTER ====================== -->
+  <footer class="foot">
+    <div class="container">
+      <div>© 2026 <strong style="color:#fff;">MAPE.IA</strong> · MAPEIA HEALTH TECH LTDA</div>
+      <small>CNPJ 66.085.433/0001-03 · A MAPE.IA não substitui consulta médica · CRM SP</small>
+      <small style="display:block; margin-top:8px;">O teste desta página é uma estimativa educativa baseada em sinais autorrelatados e não mede idade biológica. A avaliação com biomarcadores é realizada dentro da plataforma.</small>
+    </div>
+  </footer>
+
+  <script>
+    // ============== CONFIG ==============
+    // VSL: trocar playerId (e gateSeconds, se o corte mudar) quando a V4 for gravada.
+    // Os <link rel="preload"> do <head> e o VSL_PRELOAD_LINKS do quiz (../index.html)
+    // apontam pras mesmas URLs: trocar os três juntos.
+    const VSL = {
+      accountId: '2832ef97-4113-4437-b38a-987f9f729ea8',
+      playerId: '69e9ec4c05c3ed4453de70f5',   // PLACEHOLDER: VSL atual até a V4 subir
+      gateSeconds: 570                        // botão revela aos 9:30 (roteiro V4)
+    };
+    const CHECKOUT_URL = 'https://pay.hotmart.com/O105595656D?off=ssmqr5bp';
+
+    // ============== READ QUERY PARAMS ==============
+    const params = new URLSearchParams(window.location.search);
+
+    // Velocidade estimada de envelhecimento (mesma fórmula do quiz ../index.html;
+    // mudar lá = mudar aqui junto)
+    const SPEED_MIN = 1.0, SPEED_MAX = 1.8;
+    function speedFromRatio(r) {
+      return Math.round((SPEED_MIN + r * (SPEED_MAX - SPEED_MIN)) * 10) / 10;
+    }
+
+    const score = parseInt(params.get('score') || '0', 10);
+    const max = parseInt(params.get('max') || '53', 10);
+    const ratio = max > 0 ? Math.min(1, score / max) : 0;
+    const speed = speedFromRatio(ratio);
+
+    // Tiers novos + aliases pros valores legados de URLs antigas (quiz v2).
+    // Sem param d, deriva do ratio (mesmos cortes 0.55/0.30 do quiz).
+    const TIER_ALIASES = { alto: 'acelerado', moderado: 'transicao', atencao: 'estavel' };
+    let tier = (params.get('d') || '').toLowerCase();
+    tier = TIER_ALIASES[tier] || tier;
+    if (!['acelerado','transicao','estavel'].includes(tier)) {
+      tier = ratio >= 0.55 ? 'acelerado' : (ratio < 0.30 ? 'estavel' : 'transicao');
+    }
+    const speedTxt = speed.toFixed(1).replace('.', ',') + 'x';
+
+    // ============== PLAYER (montado a partir da config) ==============
+    (function mountVsl() {
+      const mount = document.getElementById('vsl-mount');
+      const el = document.createElement('vturb-smartplayer');
+      el.id = 'vid-' + VSL.playerId;
+      el.style.cssText = 'display:block; margin:0 auto; width:100%; max-width:100%;';
+      mount.appendChild(el);
+      const s = document.createElement('script');
+      s.src = 'https://scripts.converteai.net/' + VSL.accountId + '/players/' + VSL.playerId + '/v4/player.js';
+      s.async = true;
+      document.head.appendChild(s);
+    })();
+
+    // ============== GATE DA VSL ==============
+    // Oferta, garantia, médicas, 3 portas ficam .esconder até VSL.gateSeconds
+    // (persistente por visitante, padrão vTurb). ?nogate=1 revela tudo (QA).
+    function revealAll() {
+      document.querySelectorAll('.esconder').forEach(el => { el.style.display = 'block'; });
+    }
+    if (params.get('nogate') === '1') {
+      revealAll();
+    } else {
+      const tryAttach = setInterval(() => {
+        const player = document.querySelector('vturb-smartplayer');
+        if (!player) return;
+        clearInterval(tryAttach);
+        player.addEventListener('player:ready', function () {
+          if (typeof player.displayHiddenElements === 'function') {
+            player.displayHiddenElements(VSL.gateSeconds, ['.esconder'], { persist: true });
+          } else {
+            revealAll(); // fallback: player sem API de gate, não segurar a oferta
+          }
+        });
+      }, 300);
+      // fallback de segurança: se o player não carregar em 20s, não esconder a oferta pra sempre
+      setTimeout(() => {
+        if (!document.querySelector('vturb-smartplayer') || !window.smartplayer) {
+          const oferta = document.getElementById('oferta');
+          if (oferta && oferta.offsetParent === null && !window.__gateArmed) revealAll();
+        }
+      }, 20000);
+      const armCheck = setInterval(() => {
+        if (window.smartplayer) { window.__gateArmed = true; clearInterval(armCheck); }
+      }, 500);
+    }
+
+    // ============== VELOCÍMETRO (ring reaproveitado) ==============
+    const ringFill = document.getElementById('ring-fill');
+    const scoreNum = document.getElementById('score-num');
+    const scoreTierLabel = document.getElementById('score-tier-label');
+    const scoreTierText = document.getElementById('score-tier-text');
+    const scoreLabel = document.getElementById('score-label');
+
+    const TIERS = {
+      acelerado: { text: 'Ritmo acelerado',    color: '#e07560', label: 'Seu ritmo estimado está bem acima da sua idade do RG.' },
+      transicao: { text: 'Ritmo em transição', color: '#f4c95d', label: 'Seu ritmo estimado começou a descolar da idade do RG.' },
+      estavel:   { text: 'Ritmo controlado',   color: '#4a9b7a', label: 'Seu ritmo estimado está próximo da idade do RG. Bom momento pra manter.' },
+    };
+    const t = TIERS[tier] || TIERS.transicao;
+
+    scoreTierLabel.classList.add(tier);
+    scoreTierText.textContent = t.text;
+    scoreLabel.textContent = t.label;
+    scoreNum.textContent = speedTxt;
+    scoreNum.style.fontSize = '22px';
+    document.getElementById('hero-speed').textContent = speedTxt;
+
+    // preenchimento do anel = posição da velocidade na escala 1.0x-1.8x
+    const ringCircumference = 2 * Math.PI * 43; // r=43
+    const ringLevel = Math.max(0.06, (speed - SPEED_MIN) / (SPEED_MAX - SPEED_MIN));
+    ringFill.style.strokeDasharray = ringCircumference;
+    ringFill.style.strokeDashoffset = ringCircumference;
+    ringFill.style.stroke = t.color;
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        ringFill.style.strokeDashoffset = ringCircumference * (1 - ringLevel);
+      }, 200);
+    });
+
+    // ============== READ ANSWERS → BUILD ACELERADORES ==============
+    // Contrato com o quiz: mesmas 12 chaves e vals da v1/v2 (congelados)
+    const a = {
+      idade:    params.get('idade'),
+      genero:   params.get('genero'),
+      rotina:   params.get('rotina'),
+      sono:     params.get('sono'),
+      energia:  params.get('energia'),
+      corpo:    params.get('corpo'),
+      sintomas: params.get('sintomas'),
+      familia:  params.get('familia'),
+      checkup:  params.get('checkup'),
+      atitude:  params.get('atitude'),
+      incomodo: params.get('incomodo'),
+      futuro:   params.get('futuro'),
+    };
+
+    // ============== NARRATIVA PERSONALIZADA (Dra. Iana lê o caso) ==============
+    function buildNarrative() {
+      const idadeMap = {
+        '25-34': 'tem menos de 35 anos',
+        '35-44': 'está na faixa em que o ritmo começa a descolar do RG',
+        '45-54': 'está na faixa em que a diferença entre o RG e o corpo costuma ser maior',
+        '55+':   'já passou da faixa mais intensa, e ainda dá pra mexer no ponteiro'
+      };
+      const sonoMap = {
+        'bom': null,
+        'naodescansa': 'dorme mas acorda cansada',
+        'fragmentado': 'tem sono fragmentado',
+        'ruim': 'mal consegue dormir'
+      };
+      const rotinaMap = {
+        'movimento': null,
+        'misto': null,
+        'sentado': 'passa o dia inteiro sentada'
+      };
+      const corpoMap = {
+        'nada': null,
+        'barriga': 'a barriga começou a crescer sem motivo claro',
+        'recuperacao': 'a recuperação caiu nos últimos anos',
+        'pressao': 'a pressão começou a subir',
+        'varios': 'múltiplos sinais físicos apareceram juntos'
+      };
+      const sintomasMap = {
+        'ar':     'sente falta de ar em pequeno esforço',
+        'aperto': 'já teve aperto no peito ou palpitação',
+        'tontura': 'tem tontura postural',
+        'cansaco': 'cansa demais pra coisas simples',
+        'nenhum': null
+      };
+      const familiaMap = {
+        'infarto': 'tem histórico familiar de infarto antes dos 60',
+        'avc':     'tem histórico familiar de AVC antes dos 60',
+        'metabolico': 'tem histórico de diabetes ou hipertensão precoce na família',
+        'nao':     null,
+        'nsei':    null
+      };
+
+      const fatos = [];
+      if (sonoMap[a.sono]) fatos.push(sonoMap[a.sono]);
+      if (rotinaMap[a.rotina]) fatos.push(rotinaMap[a.rotina]);
+      if (corpoMap[a.corpo]) fatos.push(corpoMap[a.corpo]);
+      if (sintomasMap[a.sintomas]) fatos.push(sintomasMap[a.sintomas]);
+      if (familiaMap[a.familia]) fatos.push(familiaMap[a.familia]);
+
+      const idadeFrase = idadeMap[a.idade] || 'está na faixa de idade que eu mais vejo chegar tarde';
+
+      let frase = '';
+      if (fatos.length === 0) {
+        frase = `Olhando seus sinais, você ${idadeFrase} e não relatou queixas óbvias. <strong>Mas a velocidade do envelhecimento muda sem alarme, é exatamente o que a foto anual não mostra.</strong> Estimar cedo, e depois medir de verdade, é o que muda a curva.`;
+      } else if (fatos.length === 1) {
+        frase = `Olhando seus sinais, você ${idadeFrase} e ${fatos[0]}. <strong>Esse é um acelerador que eu vejo o tempo todo.</strong> Aperta o play que eu te explico o que ele significa.`;
+      } else if (fatos.length === 2) {
+        frase = `Olhando seus sinais, você ${idadeFrase}, ${fatos[0]} e ${fatos[1]}. <strong>Juntos, esses sinais empurram o ponteiro.</strong> A boa notícia: eles aparecem antes de virar diagnóstico, e o ponteiro volta.`;
+      } else {
+        const ultimo = fatos.pop();
+        frase = `Olhando seus sinais, você ${idadeFrase}, ${fatos.join(', ')} e ${ultimo}. <strong>Esse cruzamento é o que mais acelera o filme.</strong> Mas ele se lê. E o que se lê, se mexe, exatamente por isso esta página existe.`;
+      }
+
+      document.getElementById('narrative-text').innerHTML = frase;
+    }
+    buildNarrative();
+
+    // Each candidate: { match: () => bool, weight, ico, tag, title, text }
+    // match() e weight CONGELADOS (contrato com o quiz); só a copy foi retematizada.
+    const CANDIDATES = [
+      // ===== Sinais cardiovasculares + história familiar (prioridade máxima) =====
+      {
+        match: () => ['ar','aperto','tontura','cansaco'].includes(a.sintomas) && ['infarto','avc'].includes(a.familia),
+        weight: 14,
+        ico: 'monitor_heart',
+        tag: 'Sintoma × Genética',
+        title: 'Sintoma cardiovascular + histórico familiar precoce',
+        text: 'Você relatou um sintoma cardiovascular leve <strong>+</strong> tem um familiar próximo com infarto ou AVC antes dos 60. É o cruzamento que mais acelera o risco, e que <strong>nenhuma foto de checkup pega</strong>. ApoB, Lipoproteína(a) e Homocisteína entram em ação imediatamente.'
+      },
+      {
+        match: () => ['ar','aperto'].includes(a.sintomas),
+        weight: 12,
+        ico: 'favorite',
+        tag: 'Sintoma cardiovascular ativo',
+        title: a.sintomas === 'aperto' ? 'Aperto no peito ou palpitação não é "normal"' : 'Falta de ar em pequeno esforço pede investigação',
+        text: a.sintomas === 'aperto'
+          ? 'Aperto no peito ou batimento acelerado em quem tem 40+ <strong>nunca é só ansiedade</strong>. Pode ser arritmia inicial, espasmo coronariano ou inflamação cardíaca. Eletro + Holter + troponina ultra-sensível são o mínimo. Quase ninguém pede em consulta de rotina.'
+          : 'Falta de ar com pequeno esforço aos 40+ é <strong>o sinal mais subdiagnosticado</strong> de queda da capacidade cardiopulmonar. Geralmente atribuído a "falta de condicionamento", mas pode ser sinal precoce de disfunção cardíaca ou pulmonar mensurável.'
+      },
+      {
+        match: () => ['infarto','avc'].includes(a.familia),
+        weight: 11,
+        ico: 'family_restroom',
+        tag: 'Genética cardiovascular',
+        title: 'Sua linha familiar dobra o risco',
+        text: 'Ter pai, mãe ou irmão com infarto ou AVC antes dos 60 <strong>dobra estatisticamente</strong> o seu risco cardiovascular precoce. A vantagem: a genética define o carro, mas os hábitos definem a velocidade. Lipoproteína(a) se mede uma vez na vida e te dá um plano de blindagem específico.'
+      },
+
+      // ===== Padrões de ritmo =====
+      {
+        match: () => ['fragmentado','ruim','naodescansa'].includes(a.sono) && ['cafe','cronico','almoco'].includes(a.energia),
+        weight: 10,
+        ico: 'bed',
+        tag: 'Sono × Energia',
+        title: 'O acelerador mais silencioso: reparo noturno quebrado',
+        text: 'Sono ruim <strong>+</strong> cansaço ao longo do dia formam um dos padrões mais documentados de inflamação de baixo grau. É o tipo de combinação que faz o filme rodar em 1,5x <strong>sem nenhum exame isolado acusar</strong>.'
+      },
+      {
+        match: () => a.rotina === 'sentado' && ['barriga','pressao','varios'].includes(a.corpo),
+        weight: 9,
+        ico: 'event_seat',
+        tag: 'Sedentarismo × Corpo',
+        title: '"Sentar é o novo fumar", e você sente os efeitos',
+        text: 'Horas sentada por dia <strong>+</strong> mudanças visíveis no corpo (barriga, pressão) indicam metabolismo em modo de economia. <strong>O ponteiro anda sem você sentir na hora.</strong>'
+      },
+      {
+        match: () => ['3+','nunca'].includes(a.checkup) && ['barriga','pressao','varios','recuperacao'].includes(a.corpo),
+        weight: 9,
+        ico: 'search',
+        tag: 'Vácuo de informação',
+        title: 'Seu corpo mudou e ninguém pôs as fotos lado a lado',
+        text: 'Você relatou mudanças concretas no corpo, mas faz tempo que ninguém olha o conjunto. <strong>A velocidade aparece nos sinais antes dos exames</strong>, e hoje ninguém está juntando as suas peças.'
+      },
+      {
+        match: () => ['ignora','espera'].includes(a.atitude) && a.incomodo === 'medo',
+        weight: 8,
+        ico: 'visibility_off',
+        tag: 'Comportamento',
+        title: 'Você sente algo, mas ignora, e tem medo disso',
+        text: 'Esse paradoxo aparece muito no consultório: pessoas que ignoram sintomas e ao mesmo tempo têm medo de descobrir tarde. <strong>Saber o número dissolve o medo.</strong>'
+      },
+      {
+        match: () => ['45-54','55+'].includes(a.idade) && ['fragmentado','ruim','naodescansa'].includes(a.sono),
+        weight: 7,
+        ico: 'schedule',
+        tag: 'Idade × Sono',
+        title: 'Idade + sono ruim: o ponteiro anda mais rápido aqui',
+        text: 'A partir dos 45, sono ruim deixa de ser "fase" e vira acelerador cumulativo. <strong>Cortisol elevado, recuperação lenta e inflamação</strong> começam a conversar, geralmente em silêncio.'
+      },
+      {
+        match: () => ['barriga','pressao','varios'].includes(a.corpo),
+        weight: 6,
+        ico: 'monitor_heart',
+        tag: 'Sinal metabólico',
+        title: 'Mudanças visíveis pedem investigação cruzada',
+        text: 'Barriga crescendo sem mudança de hábito ou pressão começando a subir <strong>raramente vêm sozinhas</strong>. Hormônios, sensibilidade à insulina e ApoB costumam estar conectados, e conectados, aceleram juntos.'
+      },
+      {
+        match: () => ['fragmentado','ruim','naodescansa'].includes(a.sono),
+        weight: 5,
+        ico: 'bed',
+        tag: 'Sono',
+        title: 'Sono ruim não é sobre quantidade',
+        text: 'Dormir o tempo "certo" e ainda acordar cansada é sinal de que <strong>a arquitetura do seu sono está comprometida</strong>. É no sono profundo que o corpo repara células. Suplemento nenhum compensa, só medir e ajustar.'
+      },
+      {
+        match: () => ['cafe','cronico'].includes(a.energia),
+        weight: 5,
+        ico: 'bolt',
+        tag: 'Energia',
+        title: 'Cafeína não está mais resolvendo',
+        text: 'Quando o café perde efeito, geralmente é porque seu eixo cortisol-adrenal está cronicamente ativado. <strong>Não é falta de café, é falta de descanso real.</strong> E cortisol alto crônico acelera o relógio.'
+      },
+      {
+        match: () => a.rotina === 'sentado',
+        weight: 4,
+        ico: 'event_seat',
+        tag: 'Sedentarismo',
+        title: 'Tempo sentado pesa mais do que academia compensa',
+        text: 'A ciência mostra: <strong>academia 3x/semana não anula 10h sentada por dia</strong>. VO₂ máx e força muscular são os 2 maiores preditores de longevidade, e ambos sofrem na cadeira.'
+      },
+      {
+        match: () => a.incomodo === 'soltos',
+        weight: 4,
+        ico: 'inventory_2',
+        tag: 'Dados desconectados',
+        title: 'Seus exames estão soltos, e ninguém olha tudo junto',
+        text: 'Você tem dados de saúde espalhados em vários médicos, exames antigos e mensagens. <strong>Sem alguém juntar essas fotos, o filme fica invisível.</strong>'
+      },
+      {
+        match: () => a.incomodo === 'acao',
+        weight: 4,
+        ico: 'assignment',
+        tag: 'Falta de plano',
+        title: 'Você sabe o resultado mas não sabe o que fazer',
+        text: 'Receber exame "alterado" sem um plano claro de ação é a frustração número 1 dos pacientes. <strong>Número sem alavanca não vira mudança.</strong>'
+      },
+      {
+        match: () => true, // fallback
+        weight: 1,
+        ico: 'auto_awesome',
+        tag: 'Geral',
+        title: 'Ritmo é o número que ninguém olha',
+        text: 'Mesmo com sinais leves, é entre os 40 e 55 que <strong>se define a velocidade com que você chega aos 70</strong>. Estimar cedo, e depois medir de verdade no sangue, é o que muda a curva.'
+      },
+    ];
+
+    const matched = CANDIDATES.filter(c => c.match()).sort((x,y) => y.weight - x.weight);
+    const chosen = matched.slice(0, 3);
+
+    const signalsEl = document.getElementById('signals');
+    chosen.forEach(s => {
+      const el = document.createElement('article');
+      el.className = 'signal';
+      el.innerHTML = `
+        <div class="signal-ico"><span class="material-symbols-outlined">${s.ico}</span></div>
+        <span class="signal-tag">${s.tag}</span>
+        <div class="signal-title">${s.title}</div>
+        <p class="signal-text">${s.text}</p>
+      `;
+      signalsEl.appendChild(el);
+    });
+
+    // contagem de aceleradores no eyebrow da seção
+    document.getElementById('accel-count').textContent =
+      chosen.length + (chosen.length === 1 ? ' acelerador encontrado' : ' aceleradores encontrados');
+
+    // ============== STICKY CTA (só depois do gate + scroll) ==============
+    const stickyCta = document.getElementById('sticky-cta');
+    const ofertaEl = document.getElementById('oferta');
+    window.addEventListener('scroll', () => {
+      const gateLiberado = ofertaEl && ofertaEl.offsetParent !== null;
+      const showAt = window.innerHeight * 1.4;
+      if (gateLiberado && window.scrollY > showAt) stickyCta.classList.add('is-visible');
+      else stickyCta.classList.remove('is-visible');
+    }, { passive: true });
+
+    // ============== CHECKOUT: repasse de UTMs + InitiateCheckout ==============
+    (function attachCheckout() {
+      const keep = ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','fbclid','gclid','xcod','sck','src'];
+      const url = new URL(CHECKOUT_URL);
+      keep.forEach(k => {
+        let v = params.get(k);
+        if (!v) { try { v = localStorage.getItem(k); } catch(e) {} }
+        if (v) url.searchParams.set(k, v);
+      });
+      const finalHref = url.toString();
+      document.querySelectorAll('[data-checkout="true"]').forEach(el => {
+        el.href = finalHref;
+        el.addEventListener('click', () => {
+          if (typeof fbq !== 'undefined') {
+            fbq('track', 'InitiateCheckout', { value: 97, currency: 'BRL', content_name: 'mapeia_97' }, { eventID: 'ic_' + Date.now() });
+          }
+        });
+      });
+    })();
+  </script>
+
+</body>
+</html>
