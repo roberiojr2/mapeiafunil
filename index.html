@@ -654,7 +654,7 @@
       <img src="img/logo.png" alt="MAPE.IA">
       <span class="brand-dot"></span>
     </a>
-    <div class="topbar-meta">Mapeamento de saúde · 2 min</div>
+    <div class="topbar-meta">Calculadora do ritmo · 2 min</div>
   </header>
 
   <main class="stage" id="stage">
@@ -663,7 +663,7 @@
     <section class="step is-active capa" data-step="capa" id="step-capa">
       <div class="intro">
         <div class="eyebrow-line">
-          <span class="eyebrow-text">Mapeamento de saúde · 2 min</span>
+          <span class="eyebrow-text">Calculadora do ritmo de envelhecimento · 2 min</span>
         </div>
 
         <h2>Descubra se seu corpo está envelhecendo <em>mais rápido</em> do que deveria.</h2>
@@ -675,7 +675,7 @@
                onerror="this.onerror=null;this.src='img/amanda.png'">
         </div>
 
-        <p class="sub">E saiba exatamente o que fazer para mudar essa trajetória. Teste de 2 minutos, a partir de 24 sinais do seu dia a dia.</p>
+        <p class="sub">E saiba exatamente o que fazer para mudar essa trajetória. Faça o teste de 2 minutos.</p>
 
         <div class="cta-wrap">
           <button class="btn-cta" id="start-btn">
@@ -690,33 +690,6 @@
       </div>
 
       <p class="capa-thesis"><em>Ganhe <strong>tempo</strong>. Tempo para agir antes, tempo com saúde, tempo com quem você ama.</em></p>
-    </section>
-
-    <!-- ============ STEP PREQUIZ (micro-aula Zona Cega do Checkup) ============ -->
-    <section class="step prequiz" data-step="prequiz" id="step-prequiz">
-      <div class="prequiz-card">
-      <span class="prequiz-eyebrow"><span class="dot"></span>Antes de começar, leia 20 segundos</span>
-
-      <h2>A <span class="calig">Zona Cega</span> do seu checkup.</h2>
-
-      <p class="prequiz-text">
-        Seu exame anual é uma <strong>foto</strong>: diz como você está hoje, cada número na sua caixinha, tudo "dentro da faixa". Só que envelhecer é um <strong>filme</strong>. É a velocidade com que tudo isso caminha junto, entre uma foto e outra. E nenhum checkup de 15 marcadores mostra a velocidade do filme. <strong>Essa é a Zona Cega.</strong>
-      </p>
-
-      <div class="prequiz-pull">
-        <em>"Vi de perto, a vida inteira, gente que chegava tarde. Pessoas com a mesma idade no documento e corpos com 15 anos de diferença. A velocidade era o número que <strong>ninguém estava olhando</strong>."</em>
-        <div class="prequiz-source">
-          <img src="img/iana.png" alt="Dra. Iana Lavigne">
-          <span><strong>Dra. Iana Lavigne</strong>, Harvard Lifestyle Medicine</span>
-        </div>
-      </div>
-
-      <div class="cta-wrap" style="padding-top: 18px;">
-        <button class="btn-cta" id="prequiz-continue">
-          ESTIMAR MEU RITMO AGORA <span class="arrow">→</span>
-        </button>
-      </div>
-      </div>
     </section>
 
     <!-- ============ STEP QUIZ ============ -->
@@ -1318,7 +1291,6 @@
     // ============== ELEMENTS ==============
     const steps = {
       capa: document.getElementById('step-capa'),
-      prequiz: document.getElementById('step-prequiz'),
       quiz: document.getElementById('step-quiz'),
       'interlude-1': document.getElementById('step-interlude-1'),
       'interlude-2': document.getElementById('step-interlude-2'),
@@ -1462,13 +1434,10 @@
       if (state.step > 0) showQuestion(state.step - 1);
     });
 
-    // ============== START / PREQUIZ / INTERLÚDIOS ==============
+    // ============== START / INTERLÚDIOS ==============
+    // Modelo Natália: o CTA da capa cai direto na pergunta 1, sem tela intermediária
     document.getElementById('start-btn').addEventListener('click', () => {
       sendEvent('quiz_start', { category: 'Health' });
-      showStep('prequiz');
-    });
-    document.getElementById('prequiz-continue').addEventListener('click', () => {
-      sendEvent('prequiz_continue', { step: 0 });
       showQuestion(0);
     });
     document.getElementById('interlude-1-continue').addEventListener('click', () => showQuestion(8));
@@ -1510,7 +1479,7 @@
 
     // Velocidade estimada de envelhecimento (mesma fórmula em resultado/index.html,
     // que deriva de score/max da URL; mudar aqui = mudar lá junto)
-    const SPEED_MIN = 1.0, SPEED_MAX = 1.8;
+    const SPEED_MIN = 1.0, SPEED_MAX = 1.6;
     function speedFromRatio(ratio) {
       return Math.round((SPEED_MIN + ratio * (SPEED_MAX - SPEED_MIN)) * 10) / 10;
     }
