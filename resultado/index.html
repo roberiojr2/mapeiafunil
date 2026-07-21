@@ -40,15 +40,16 @@
   <!-- End Meta Pixel Code -->
   <!-- TODO: GA4 / GTM (Robério passar ID) -->
 
-  <!-- vTurb preload: TROCAR junto com VSL.playerId (script abaixo) quando a VSL curta for gravada.
-       O prefetch do quiz (../index.html, VSL_PRELOAD_LINKS) usa as mesmas URLs: trocar lá também. -->
-  <link rel="preload" href="https://scripts.converteai.net/2832ef97-4113-4437-b38a-987f9f729ea8/players/69e9ec4c05c3ed4453de70f5/v4/player.js" as="script">
+  <!-- vTurb: teste A/B 50/50 (VSL Amanda × VSL Iana, verticais). O prefetch do quiz
+       (../index.html, VSL_PRELOAD_LINKS) usa a mesma URL de player.js: trocar junto. -->
+  <script>!function(i,n){i._plt=i._plt||(n&&n.timeOrigin?n.timeOrigin+n.now():Date.now())}(window,performance);</script>
+  <link rel="preload" href="https://scripts.converteai.net/2832ef97-4113-4437-b38a-987f9f729ea8/ab-test/6a5fd7efa39fe479992ac310/player.js" as="script">
   <link rel="preload" href="https://scripts.converteai.net/lib/js/smartplayer-wc/v4/smartplayer.js" as="script">
-  <link rel="preload" href="https://cdn.converteai.net/2832ef97-4113-4437-b38a-987f9f729ea8/69e9ec3788365845bd044b87/main.m3u8" as="fetch" crossorigin="anonymous">
   <link rel="preconnect" href="https://cdn.converteai.net" crossorigin>
   <link rel="preconnect" href="https://scripts.converteai.net" crossorigin>
   <link rel="dns-prefetch" href="https://images.converteai.net">
-  <link rel="dns-prefetch" href="https://api.vturb.com.br">
+  <link rel="dns-prefetch" href="https://m3u8.vturb.net">
+  <link rel="dns-prefetch" href="https://license.vturb.com">
 
   <style>
     /* Fontes de sistema (padrão atual do funil Natalia: zero webfont na VSL) */
@@ -96,7 +97,8 @@
 
     /* Video */
     .video-section{background:var(--sand);padding:0 16px 0;text-align:center}
-    .video-wrap{max-width:620px;margin:0 auto;border-radius:20px;overflow:hidden;box-shadow:0 20px 50px rgba(10,122,136,.12)}
+    /* VSL vertical (9:16): wrap acompanha a largura do player */
+    .video-wrap{max-width:400px;margin:0 auto;border-radius:20px;overflow:hidden;box-shadow:0 20px 50px rgba(10,122,136,.12)}
     .esconder{display:none}
 
     /* Sections */
@@ -435,14 +437,15 @@
 
 <script>
   // ============== CONFIG ==============
-  // VSL: trocar playerId + m3u8 dos preloads (head) + VSL_PRELOAD_LINKS do quiz
-  // quando a VSL curta for gravada. gateSeconds = segundo em que o botão revela
-  // (na VSL curta: início do bloco "dois caminhos", ~150s; 180s é o padrão
-  // validado da Natalia pra VSL de 4:05).
+  // VSL: teste A/B do vTurb (50/50) entre VSL Amanda e VSL Iana, verticais.
+  // gateSeconds = segundo em que o botão revela. 320s = início do bloco
+  // "dois caminhos" nas duas variantes (Iana 5m21 / Amanda 5m33; preço
+  // falado aos 5m50 / 6m02). Se as VSLs forem recortadas pra ~4min,
+  // recalibrar aqui e no comentário.
   const VSL = {
     accountId: '2832ef97-4113-4437-b38a-987f9f729ea8',
-    playerId: '69e9ec4c05c3ed4453de70f5',   // PLACEHOLDER: VSL longa atual até a curta subir
-    gateSeconds: 180
+    abTestId: '6a5fd7efa39fe479992ac310',
+    gateSeconds: 320
   };
   const CHECKOUT_URL = 'https://pay.hotmart.com/O105595656D?off=ssmqr5bp';
 
@@ -478,15 +481,15 @@
   document.getElementById('hero-speed').textContent = speedTxt;
   document.getElementById('hero-tier').textContent = TIERS[tier];
 
-  // ============== PLAYER (montado da config) + GATE ==============
+  // ============== PLAYER (teste A/B montado da config) + GATE ==============
   (function mountVsl() {
     const mount = document.getElementById('vsl-mount');
     const el = document.createElement('vturb-smartplayer');
-    el.id = 'vid-' + VSL.playerId;
+    el.id = 'ab-' + VSL.abTestId;
     el.style.cssText = 'display:block; margin:0 auto; width:100%; max-width:400px;';
     mount.appendChild(el);
     const s = document.createElement('script');
-    s.src = 'https://scripts.converteai.net/' + VSL.accountId + '/players/' + VSL.playerId + '/v4/player.js';
+    s.src = 'https://scripts.converteai.net/' + VSL.accountId + '/ab-test/' + VSL.abTestId + '/player.js';
     s.async = true;
     document.head.appendChild(s);
   })();

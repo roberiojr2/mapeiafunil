@@ -1229,10 +1229,11 @@
     // Apenas <link rel="prefetch">: não instancia player, não baixa segmentos.
     // Deixa player.js + smartplayer + m3u8 no cache HTTP pro /resultado/.
     const VSL_PRELOAD_AT_STEP = 17;
+    // Teste A/B do vTurb (50/50 Amanda × Iana): só player.js + smartplayer.
+    // Sem m3u8 fixo, porque a variante só é sorteada quando o player carrega.
     const VSL_PRELOAD_LINKS = [
-      { rel: 'prefetch', as: 'script', href: 'https://scripts.converteai.net/2832ef97-4113-4437-b38a-987f9f729ea8/players/69e9ec4c05c3ed4453de70f5/v4/player.js' },
-      { rel: 'prefetch', as: 'script', href: 'https://scripts.converteai.net/lib/js/smartplayer-wc/v4/smartplayer.js' },
-      { rel: 'prefetch', as: 'fetch',  href: 'https://cdn.converteai.net/2832ef97-4113-4437-b38a-987f9f729ea8/69e9ec3788365845bd044b87/main.m3u8', crossOrigin: 'anonymous' }
+      { rel: 'prefetch', as: 'script', href: 'https://scripts.converteai.net/2832ef97-4113-4437-b38a-987f9f729ea8/ab-test/6a5fd7efa39fe479992ac310/player.js' },
+      { rel: 'prefetch', as: 'script', href: 'https://scripts.converteai.net/lib/js/smartplayer-wc/v4/smartplayer.js' }
     ];
     function preloadVslAssets() {
       if (window.__vslPreloaded) return;
