@@ -433,16 +433,15 @@
       color: var(--accent-ink);
     }
     .progress-meta .stage-tag .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
-    .progress-meta .step-count { font-variant-numeric: tabular-nums; font-weight: 600; }
 
-    .progress { display: flex; gap: 3px; align-items: center; margin: 0 0 14px; }
-    .progress .seg {
-      flex: 1; height: 2px; border-radius: 999px;
-      background: var(--border);
-      transition: background .4s ease;
+    /* Barra contínua (sem segmentos contáveis: contagem de perguntas gera fricção) */
+    .progress { height: 3px; border-radius: 999px; background: var(--border); margin: 0 0 14px; overflow: hidden; }
+    .progress .fill {
+      height: 100%; width: 0%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-ink));
+      transition: width .45s ease;
     }
-    .progress .seg.done { background: var(--accent-ink); }
-    .progress .seg.current { background: var(--accent); }
 
     .quiz-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
     .chip {
@@ -517,13 +516,6 @@
     }
 
     /* ===================== PERGUNTA + OPÇÕES ===================== */
-    .q-label {
-      font-size: 11px; font-weight: 600;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 6px;
-    }
     .question {
       font-family: var(--font-display);
       font-style: normal;
@@ -705,7 +697,6 @@
 
       <div class="progress-meta">
         <span class="stage-tag"><span class="dot"></span><span id="stage-tag-text">Seu momento</span></span>
-        <span class="step-count" id="step-count">01 / 24</span>
       </div>
       <div class="progress" id="progress"></div>
 
@@ -726,7 +717,6 @@
         <div class="insight-text" id="q-callout-text"></div>
       </div>
 
-      <div class="q-label" id="q-label">Pergunta 1</div>
       <h2 class="question" id="q-text"></h2>
 
       <div class="options" id="q-options"></div>
@@ -1298,14 +1288,12 @@
       calc: document.getElementById('step-calc')
     };
     const qText        = document.getElementById('q-text');
-    const qLabel       = document.getElementById('q-label');
     const qCallout     = document.getElementById('q-callout');
     const qCalloutText = document.getElementById('q-callout-text');
     const qOptions     = document.getElementById('q-options');
     const backBtn      = document.getElementById('back-btn');
     const progressEl   = document.getElementById('progress');
     const stageTagText = document.getElementById('stage-tag-text');
-    const stepCount    = document.getElementById('step-count');
     const chipSinais   = document.getElementById('chip-sinais');
     const chipPrecisao = document.getElementById('chip-precisao');
     const chipTempo    = document.getElementById('chip-tempo');
@@ -1344,16 +1332,15 @@
       else topbar.classList.remove('scrolled');
     }, { passive: true });
 
-    // ============== PROGRESSO SEGMENTADO ==============
+    // ============== PROGRESSO CONTÍNUO ==============
     function renderProgress(idx) {
-      let html = '';
-      for (let i = 0; i < TOTAL; i++) {
-        let cls = 'seg';
-        if (i < idx) cls += ' done';
-        else if (i === idx) cls += ' current';
-        html += '<div class="' + cls + '"></div>';
+      let fill = progressEl.querySelector('.fill');
+      if (!fill) {
+        fill = document.createElement('div');
+        fill.className = 'fill';
+        progressEl.appendChild(fill);
       }
-      progressEl.innerHTML = html;
+      fill.style.width = Math.round(((idx + 1) / TOTAL) * 100) + '%';
     }
 
     // ============== PERGUNTA ==============
@@ -1378,7 +1365,6 @@
         qCallout.style.display = 'none';
       }
 
-      qLabel.textContent = 'Pergunta ' + (idx + 1) + ' de ' + TOTAL;
       qText.textContent = q.text;
 
       qOptions.innerHTML = '';
@@ -1393,9 +1379,8 @@
         qOptions.appendChild(btn);
       });
 
-      // Meta: capítulo + contagem + chips
+      // Meta: capítulo + chips (sem contagem de perguntas: fricção)
       stageTagText.textContent = q.stage;
-      stepCount.textContent = String(idx + 1).padStart(2, '0') + ' / ' + String(TOTAL).padStart(2, '0');
       chipSinais.textContent = signsCount();
       chipPrecisao.textContent = Math.round((idx / TOTAL) * 85 + 10) + '%';
       const remaining = TOTAL - idx;
